@@ -1,0 +1,28 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  unit_tests:
+    name: unit tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+        rev: [nightly]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.rev }}
+
+      - name: Run tests
+        run: |
+          nvim --version
+          make test
